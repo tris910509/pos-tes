@@ -3,56 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Kasir Lengkap</title>
+    <title>Aplikasi Kasir Bisnis Lengkap</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background-color: #f5f5f5;
         }
         .container {
             max-width: 1200px;
             margin: 20px auto;
-            padding: 20px;
             background: #fff;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        h1, h2, h3 {
+        h1, h2 {
             text-align: center;
             color: #333;
         }
         input, select, button {
-            display: block;
             width: 100%;
             margin: 10px 0;
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            box-sizing: border-box;
         }
         button {
-            background: #007bff;
+            background-color: #007bff;
             color: #fff;
+            border: none;
             cursor: pointer;
         }
         button:hover {
-            background: #0056b3;
+            background-color: #0056b3;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin-top: 20px;
         }
-        table th, table td {
+        th, td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
         }
-        table th {
-            background: #007bff;
-            color: #fff;
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .low-stock {
+            color: red;
+            font-weight: bold;
         }
         .hidden {
             display: none;
@@ -61,214 +64,173 @@
 </head>
 <body>
     <div class="container">
-        <h1>Aplikasi Kasir Lengkap</h1>
+        <h1>Aplikasi Kasir Bisnis Lengkap</h1>
 
-        <!-- Kategori -->
-        <h2>Manajemen Kategori</h2>
-        <form id="categoryForm">
-            <input type="text" id="categoryName" placeholder="Nama Kategori" required>
-            <button type="submit">Tambah Kategori</button>
-        </form>
-        <table id="categoryTable">
-            <thead>
-                <tr>
-                    <th>Kategori</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <!-- Produk -->
-        <h2>Manajemen Produk</h2>
-        <form id="productForm">
-            <input type="text" id="productName" placeholder="Nama Produk" required>
-            <input type="number" id="productPrice" placeholder="Harga Produk" required>
-            <input type="number" id="productStock" placeholder="Stok Produk" required>
-            <select id="productCategory" required>
-                <option value="">Pilih Kategori</option>
+        <!-- Login -->
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <select id="loginRole">
+                <option value="admin">Admin</option>
+                <option value="kasir">Kasir</option>
             </select>
-            <button type="submit">Tambah Produk</button>
+            <button type="submit">Login</button>
         </form>
-        <table id="productTable">
-            <thead>
-                <tr>
-                    <th>Nama Produk</th>
-                    <th>Harga</th>
-                    <th>Stok</th>
-                    <th>Kategori</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+
+        <div id="dashboard" class="hidden">
+            <h2>Dashboard</h2>
+            <button onclick="showSection('productManagement')">Manajemen Produk</button>
+            <button onclick="showSection('transactions')">Transaksi</button>
+            <button onclick="showSection('reports')">Laporan</button>
+        </div>
+
+        <!-- Manajemen Produk -->
+        <div id="productManagement" class="hidden">
+            <h2>Manajemen Produk</h2>
+            <form id="productForm">
+                <input type="text" id="productName" placeholder="Nama Produk" required>
+                <input type="number" id="productPrice" placeholder="Harga Produk" required>
+                <input type="number" id="productStock" placeholder="Stok Produk" required>
+                <select id="productCategory">
+                    <option value="Umum">Umum</option>
+                    <option value="Elektronik">Elektronik</option>
+                    <option value="Makanan">Makanan</option>
+                </select>
+                <button type="submit">Tambah Produk</button>
+            </form>
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
+                        <th>Kategori</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
 
         <!-- Transaksi -->
-        <h2>Transaksi</h2>
-        <form id="transactionForm">
-            <select id="transactionProduct" required>
-                <option value="">Pilih Produk</option>
-            </select>
-            <input type="number" id="transactionQuantity" placeholder="Jumlah" required>
-            <select id="transactionPaymentStatus" required>
-                <option value="">Status Pembayaran</option>
-                <option value="Lunas">Lunas</option>
-                <option value="Belum Lunas">Belum Lunas</option>
-                <option value="Pending">Pending</option>
-            </select>
-            <textarea id="paymentDescription" placeholder="Keterangan Pembayaran"></textarea>
-            <button type="submit">Tambah ke Transaksi</button>
-        </form>
-        <table id="transactionTable">
-            <thead>
-                <tr>
-                    <th>Produk</th>
-                    <th>Harga</th>
-                    <th>Jumlah</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Keterangan</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <h3>Total: <span id="totalAmount">0</span></h3>
-        <button id="finalizeTransaction">Selesaikan Transaksi</button>
-
-        <!-- Cetak Struk -->
-        <h2>Cetak Struk</h2>
-        <div id="receipt" class="hidden"></div>
-        <button id="printReceipt" class="hidden">Cetak Struk</button>
+        <div id="transactions" class="hidden">
+            <h2>Transaksi</h2>
+            <form id="transactionForm">
+                <select id="transactionProduct">
+                    <option value="">Pilih Produk</option>
+                </select>
+                <input type="number" id="transactionQuantity" placeholder="Jumlah" required>
+                <select id="transactionStatus">
+                    <option value="Lunas">Lunas</option>
+                    <option value="Belum Lunas">Belum Lunas</option>
+                    <option value="Pending">Pending</option>
+                </select>
+                <textarea id="transactionNotes" placeholder="Keterangan Pembayaran"></textarea>
+                <button type="submit">Tambah Transaksi</button>
+            </form>
+            <table id="transactionTable">
+                <thead>
+                    <tr>
+                        <th>Produk</th>
+                        <th>Harga</th>
+                        <th>Jumlah</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Keterangan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button id="finalizeTransaction">Selesaikan Transaksi</button>
+            <h3>Total: <span id="transactionTotal">0</span></h3>
+        </div>
 
         <!-- Laporan -->
-        <h2>Laporan Transaksi</h2>
-        <input type="date" id="reportDate">
-        <button id="generateReport">Tampilkan Laporan</button>
-        <table id="reportTable">
-            <thead>
-                <tr>
-                    <th>Produk</th>
-                    <th>Harga</th>
-                    <th>Jumlah</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Keterangan</th>
-                    <th>Tanggal</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <div id="reports" class="hidden">
+            <h2>Laporan</h2>
+            <input type="date" id="reportDate">
+            <button id="generateReport">Tampilkan Laporan</button>
+            <table id="reportTable">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Produk</th>
+                        <th>Jumlah</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        // Data Storage
-        const categories = [];
+        // Data simulasi
         const products = [];
         const transactions = [];
-        const transactionHistory = [];
+        let loggedInUser = null;
 
-        // Element References
-        const categoryForm = document.getElementById("categoryForm");
-        const categoryTable = document.getElementById("categoryTable").querySelector("tbody");
-
-        const productForm = document.getElementById("productForm");
-        const productTable = document.getElementById("productTable").querySelector("tbody");
-        const productCategory = document.getElementById("productCategory");
-
-        const transactionForm = document.getElementById("transactionForm");
-        const transactionProduct = document.getElementById("transactionProduct");
-        const transactionTable = document.getElementById("transactionTable").querySelector("tbody");
-        const totalAmount = document.getElementById("totalAmount");
-
-        const receipt = document.getElementById("receipt");
-        const printReceipt = document.getElementById("printReceipt");
-
-        const reportDate = document.getElementById("reportDate");
-        const reportTable = document.getElementById("reportTable").querySelector("tbody");
-
-        // Event Listeners
-        categoryForm.addEventListener("submit", (e) => {
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const categoryName = document.getElementById("categoryName").value;
-            categories.push({ name: categoryName });
-            renderCategories();
-            categoryForm.reset();
-        });
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const role = document.getElementById('loginRole').value;
 
-        productForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const productName = document.getElementById("productName").value;
-            const productPrice = parseFloat(document.getElementById("productPrice").value);
-            const productStock = parseInt(document.getElementById("productStock").value);
-            const productCategoryIndex = document.getElementById("productCategory").value;
-            if (productCategoryIndex !== "") {
-                products.push({
-                    name: productName,
-                    price: productPrice,
-                    stock: productStock,
-                    category: categories[productCategoryIndex].name,
-                });
-                renderProducts();
-                renderTransactionProducts();
-                productForm.reset();
+            if (username === 'admin' && password === 'admin') {
+                loggedInUser = { role };
+                document.getElementById('dashboard').classList.remove('hidden');
+                alert('Login berhasil sebagai Admin!');
+            } else if (username === 'kasir' && password === 'kasir') {
+                loggedInUser = { role };
+                document.getElementById('dashboard').classList.remove('hidden');
+                alert('Login berhasil sebagai Kasir!');
+            } else {
+                alert('Username atau password salah.');
             }
         });
 
-        transactionForm.addEventListener("submit", (e) => {
+        function showSection(sectionId) {
+            document.querySelectorAll('.hidden').forEach(section => section.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        // Tambah Produk
+        document.getElementById('productForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const productIndex = transactionProduct.value;
-            const quantity = parseInt(document.getElementById("transactionQuantity").value);
-            const paymentStatus = document.getElementById("transactionPaymentStatus").value;
-            const paymentDescription = document.getElementById("paymentDescription").value;
+            const name = document.getElementById('productName').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const stock = parseInt(document.getElementById('productStock').value);
+            const category = document.getElementById('productCategory').value;
 
-            if (productIndex !== "" && quantity > 0 && paymentStatus) {
-                const product = products[productIndex];
-                if (product.stock >= quantity) {
-                    product.stock -= quantity;
-                    const total = product.price * quantity;
-                    transactions.push({
-                        product,
-                        quantity,
-                        total,
-                        paymentStatus,
-                        paymentDescription,
-                        date: new Date().toLocaleDateString(),
-                    });
-                    renderProducts();
-                    renderTransactions();
-                } else {
-                    alert("Stok tidak mencukupi!");
-                }
-            }
+            products.push({ name, price, stock, category });
+            renderProducts();
         });
 
-        document.getElementById("finalizeTransaction").addEventListener("click", () => {
-            transactionHistory.push(...transactions);
-            renderTransactionHistory();
-            printReceipt.classList.remove("hidden");
-            receipt.classList.remove("hidden");
-            generateReceipt();
-            transactions.length = 0;
-            renderTransactions();
-        });
+        function renderProducts() {
+            const tbody = document.getElementById('productTable').querySelector('tbody');
+            tbody.innerHTML = '';
+            products.forEach((product, index) => {
+                const row = `
+                    <tr>
+                        <td>${product.name}</td>
+                        <td>${product.price}</td>
+                        <td class="${product.stock < 5 ? 'low-stock' : ''}">${product.stock}</td>
+                        <td>${product.category}</td>
+                        <td><button onclick="deleteProduct(${index})">Hapus</button></td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
 
-        document.getElementById("generateReport").addEventListener("click", () => {
-            const selectedDate = reportDate.value;
-            const filteredTransactions = transactionHistory.filter(
-                (transaction) => transaction.date === selectedDate
-            );
-            renderReport(filteredTransactions);
-        });
-
-        // Helper Functions
-        function renderCategories() { /* ... */ }
-        function renderProducts() { /* ... */ }
-        function renderTransactionProducts() { /* ... */ }
-        function renderTransactions() { /* ... */ }
-        function renderTransactionHistory() { /* ... */ }
-        function renderReport(data) { /* ... */ }
-        function generateReceipt() { /* ... */ }
+        function deleteProduct(index) {
+            products.splice(index, 1);
+            renderProducts();
+        }
     </script>
 </body>
 </html>
