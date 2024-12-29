@@ -3,234 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Kasir Bisnis Lengkap</title>
+    <title>Aplikasi Kasir</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
-            text-align: center;
-            color: #333;
-        }
-        input, select, button {
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
         }
         th, td {
-            border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        .low-stock {
-            color: red;
-            font-weight: bold;
-        }
-        .hidden {
-            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Aplikasi Kasir Bisnis Lengkap</h1>
 
-        <!-- Login -->
-        <h2>Login</h2>
-        <form id="loginForm">
-            <input type="text" id="loginUsername" placeholder="Username" required>
-            <input type="password" id="loginPassword" placeholder="Password" required>
-            <select id="loginRole">
-                <option value="admin">Admin</option>
-                <option value="kasir">Kasir</option>
-            </select>
-            <button type="submit">Login</button>
-        </form>
+    <h1>Aplikasi Kasir</h1>
 
-        <div id="dashboard" class="hidden">
-            <h2>Dashboard</h2>
-            <button onclick="showSection('productManagement')">Manajemen Produk</button>
-            <button onclick="showSection('transactions')">Transaksi</button>
-            <button onclick="showSection('reports')">Laporan</button>
+    <!-- Form User -->
+    <h2>Manajemen Pengguna</h2>
+    <form id="userForm">
+        <input type="text" id="userName" placeholder="Nama Pengguna" required>
+        <input type="password" id="userPassword" placeholder="Password" required>
+        <select id="userRole">
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+        </select>
+        <button type="submit">Tambah Pengguna</button>
+    </form>
+
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Role</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Form Kategori -->
+    <h2>Manajemen Kategori</h2>
+    <form id="categoryForm">
+        <input type="text" id="categoryName" placeholder="Nama Kategori" required>
+        <button type="submit">Tambah Kategori</button>
+    </form>
+
+    <table id="categoryTable">
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Form Supplier -->
+    <h2>Manajemen Supplier</h2>
+    <form id="supplierForm">
+        <input type="text" id="supplierName" placeholder="Nama Supplier" required>
+        <input type="text" id="supplierContact" placeholder="Kontak Supplier" required>
+        <button type="submit">Tambah Supplier</button>
+    </form>
+
+    <table id="supplierTable">
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Kontak</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Form Produk -->
+    <h2>Manajemen Produk</h2>
+    <form id="productForm">
+        <input type="text" id="productName" placeholder="Nama Produk" required>
+        <select id="productCategory">
+            <option value="">Pilih Kategori</option>
+            <script>
+                categories.forEach(category => {
+                    document.write(`<option value="${category.name}">${category.name}</option>`);
+                });
+            </script>
+        </select>
+        <input type="number" id="productPrice" placeholder="Harga" required>
+        <input type="number" id="productStock" placeholder="Stok" required>
+        <input type="text" id="productDescription" placeholder="Deskripsi">
+        <button type="submit">Tambah Produk</button>
+    </form>
+
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Deskripsi</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Form Transaksi -->
+    <h2>Transaksi</h2>
+    <form id="transactionForm">
+        <select id="transactionProduct">
+            <option value="">Pilih Produk</option>
+            <script>
+                products.forEach(product => {
+                    document.write(`<option value="${product.name}">${product.name}</option>`);
+                });
+            </script>
+        </select>
+        <input type="number" id="transactionQuantity" placeholder="Jumlah" required>
+        <input type="text" id="transactionCustomer" placeholder="Nama Pelanggan" required>
+        <div>
+            <label><input type="radio" name="paymentStatus" value="Lunas" checked>Lunas</label>
+            <label><input type="radio" name="paymentStatus" value="Belum Lunas">Belum Lunas</label>
+            <label><input type="radio" name="paymentStatus" value="Pending">Pending</label>
         </div>
+        <button type="submit">Tambah Transaksi</button>
+    </form>
 
-        <!-- Manajemen Produk -->
-        <div id="productManagement" class="hidden">
-            <h2>Manajemen Produk</h2>
-            <form id="productForm">
-                <input type="text" id="productName" placeholder="Nama Produk" required>
-                <input type="number" id="productPrice" placeholder="Harga Produk" required>
-                <input type="number" id="productStock" placeholder="Stok Produk" required>
-                <select id="productCategory">
-                    <option value="Umum">Umum</option>
-                    <option value="Elektronik">Elektronik</option>
-                    <option value="Makanan">Makanan</option>
-                </select>
-                <button type="submit">Tambah Produk</button>
-            </form>
-            <table id="productTable">
-                <thead>
-                    <tr>
-                        <th>Nama Produk</th>
-                        <th>Harga</th>
-                        <th>Stok</th>
-                        <th>Kategori</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-
-        <!-- Transaksi -->
-        <div id="transactions" class="hidden">
-            <h2>Transaksi</h2>
-            <form id="transactionForm">
-                <select id="transactionProduct">
-                    <option value="">Pilih Produk</option>
-                </select>
-                <input type="number" id="transactionQuantity" placeholder="Jumlah" required>
-                <select id="transactionStatus">
-                    <option value="Lunas">Lunas</option>
-                    <option value="Belum Lunas">Belum Lunas</option>
-                    <option value="Pending">Pending</option>
-                </select>
-                <textarea id="transactionNotes" placeholder="Keterangan Pembayaran"></textarea>
-                <button type="submit">Tambah Transaksi</button>
-            </form>
-            <table id="transactionTable">
-                <thead>
-                    <tr>
-                        <th>Produk</th>
-                        <th>Harga</th>
-                        <th>Jumlah</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Keterangan</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <button id="finalizeTransaction">Selesaikan Transaksi</button>
-            <h3>Total: <span id="transactionTotal">0</span></h3>
-        </div>
-
-        <!-- Laporan -->
-        <div id="reports" class="hidden">
-            <h2>Laporan</h2>
-            <input type="date" id="reportDate">
-            <button id="generateReport">Tampilkan Laporan</button>
-            <table id="reportTable">
-                <thead>
-                    <tr>
-                        <th>Tanggal</th>
-                        <th>Produk</th>
-                        <th>Jumlah</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
+    <table id="transactionTable">
+        <thead>
+            <tr>
+                <th>Produk</th>
+                <th>Jumlah</th>
+                <th>Pelanggan</th>
+                <th>Total Harga</th>
+                <th>Status Pembayaran</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
     <script>
-        // Data simulasi
-        const products = [];
-        const transactions = [];
-        let loggedInUser = null;
+// Data untuk users, categories, suppliers, products, transactions
+const users = [];
+const categories = [];
+const suppliers = [];
+const products = [];
+const transactions = [];
 
-        // Login
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            const role = document.getElementById('loginRole').value;
+// Tambah Pengguna
+document.getElementById('userForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('userName').value.trim();
+    const password = document.getElementById('userPassword').value.trim();
+    const role = document.getElementById('userRole').value;
 
-            if (username === 'admin' && password === 'admin') {
-                loggedInUser = { role };
-                document.getElementById('dashboard').classList.remove('hidden');
-                alert('Login berhasil sebagai Admin!');
-            } else if (username === 'kasir' && password === 'kasir') {
-                loggedInUser = { role };
-                document.getElementById('dashboard').classList.remove('hidden');
-                alert('Login berhasil sebagai Kasir!');
-            } else {
-                alert('Username atau password salah.');
-            }
-        });
+    if (name && password) {
+        users.push({ name, password, role });
+        renderUsers();
+        document.getElementById('userForm').reset();
+    } else {
+        alert('Nama dan password harus diisi!');
+    }
+});
 
-        function showSection(sectionId) {
-            document.querySelectorAll('.hidden').forEach(section => section.classList.add('hidden'));
-            document.getElementById(sectionId).classList.remove('hidden');
-        }
+// Render Pengguna
+function renderUsers() {
+    const tbody = document.getElementById('userTable').querySelector('tbody');
+    tbody.innerHTML = '';
+    users.forEach((user, index) => {
+        const row = `
+            <tr>
+                <td>${user.name}</td>
+                <td>${user.role}</td>
+                <td><button onclick="deleteUser(${index})">Hapus</button></td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+}
 
-        // Tambah Produk
-        document.getElementById('productForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('productName').value;
-            const price = parseFloat(document.getElementById('productPrice').value);
-            const stock = parseInt(document.getElementById('productStock').value);
-            const category = document.getElementById('productCategory').value;
+// Hapus Pengguna
+function deleteUser(index) {
+    users.splice(index, 1);
+    renderUsers();
+}
 
-            products.push({ name, price, stock, category });
-            renderProducts();
-        });
+// Tambah Kategori
+document.getElementById('categoryForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('categoryName').value.trim();
 
-        function renderProducts() {
-            const tbody = document.getElementById('productTable').querySelector('tbody');
-            tbody.innerHTML = '';
-            products.forEach((product, index) => {
-                const row = `
-                    <tr>
-                        <td>${product.name}</td>
-                        <td>${product.price}</td>
-                        <td class="${product.stock < 5 ? 'low-stock' : ''}">${product.stock}</td>
-                        <td>${product.category}</td>
-                        <td><button onclick="deleteProduct(${index})">Hapus</button></td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
+    if (name) {
+        categories.push({ name });
+        renderCategories();
+        document.getElementById('categoryForm').reset();
+    } else {
+        alert('Nama kategori harus diisi!');
+    }
+});
+
+// Render Kategori
+function renderCategories() {
+    const tbody = document.getElementById('categoryTable').querySelector('tbody');
+    tbody.innerHTML = '';
+    categories.forEach((category, index) => {
+        const row = `
+            <tr>
+                <td>${category.name}</td>
+                <td><button onclick="deleteCategory(${index})">Hapus</button></td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+}
+
+// Hapus Kategori
+function deleteCategory(index) {
+    categories.splice(index, 1);
+    renderCategories();
+}
+
+// Tambah Supplier
+document.getElementById('supplierForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('supplierName').value.trim();
+    const contact = document.getElementById('supplierContact').value.trim();
+
+    if (name && contact) {
+        suppliers.push({ name, contact });
+        renderSuppliers();
+        document.getElementById('supplierForm').reset();
+    } else {
+        alert('Nama dan kontak supplier harus diisi!');
+    }
+});
+
+// Render Supplier
+function renderSuppliers() {
+    const tbody = document.getElementById('supplierTable').querySelector('tbody');
+    tbody.innerHTML = '';
+    suppliers.forEach((supplier, index) => {
+        const row = `
+            <tr>
+                <td>${supplier.name}</td>
+                <td>${supplier.contact}</td>
+                <td><button onclick="deleteSupplier(${index})">Hapus</button></td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+}
+
+// Hapus Supplier
+function deleteSupplier(index) {
+    suppliers.splice(index, 1);
+    renderSuppliers();
+}
+
+// Tambah Produk
+document.getElementById('productForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const name = document.getElementById('productName').value.trim();
+    const category = document.getElementById('productCategory').value;
+    const price = parseFloat(document.getElementById('productPrice').value.trim());
+    const stock = parseInt(document.getElementById('productStock').value.trim());
+    const description = document.getElementById('productDescription').value.trim();
+
+    if (name && category && !isNaN(price) && !isNaN(stock)) {
+        products.push({ name, category, price, stock, description });
+        renderProducts();
+        document.getElementById('productForm').reset();
+    } else {
+        alert('Semua field harus diisi dengan benar!');
+    }
+});
+
+// Render Produk
+function renderProducts() {
+    const tbody = document.getElementById('productTable').querySelector('tbody');
+    tbody.innerHTML = '';
+    products.forEach((product, index) => {
+        const row = `
+            <tr>
+                <td>${product.name}</td>
+                <td>${product.category}</td>
+                <td>${product.price}</td>
+                <td>${product.stock}</td>
+                <td>${product.description}</td>
+                <td><button onclick="deleteProduct(${index})">Hapus</button></td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+}
+
+// Hapus Produk
+function deleteProduct(index) {
+    products.splice(index, 1);
+    renderProducts();
+}
+
+// Tambah Transaksi
+document.getElementById('transactionForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const productName = document.getElementById('transactionProduct').value.trim();
+    const quantity = parseInt(document.getElementById('transactionQuantity').value.trim());
+    const customerName = document.getElementById('transactionCustomer').value.trim();
+    const paymentStatus = document.querySelector('input[name="paymentStatus"]:checked').value;
+
+    if (productName && !isNaN(quantity) && quantity > 0 && customerName) {
+        const product = products.find(p => p.name === productName);
+        if (product && product.stock >= quantity) {
+            transactions.push({
+                product: productName,
+                quantity,
+                customer: customerName,
+                totalPrice: product.price * quantity,
+                paymentStatus
             });
-        }
-
-        function deleteProduct(index) {
-            products.splice(index, 1);
+            product.stock -= quantity;
+            renderTransactions();
             renderProducts();
+            document.getElementById('transactionForm').reset();
+        } else {
+            alert('Stok produk tidak mencukupi atau input tidak valid.');
         }
+    } else {
+        alert('Semua field transaksi harus diisi dengan benar!');
+    }
+});
+
+// Render Transaksi
+function renderTransactions() {
+    const tbody = document.getElementById('transactionTable').querySelector('tbody');
+    tbody.innerHTML = '';
+    transactions.forEach((transaction, index) => {
+        const row = `
+            <tr>
+                <td>${transaction.product}</td>
+                <td>${transaction.quantity}</td>
+                <td>${transaction.customer}</td>
+                <td>${transaction.totalPrice}</td>
+                <td>${transaction.paymentStatus}</td>
+                <td><button onclick="deleteTransaction(${index})">Hapus</button></td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+}
+
+// Hapus Transaksi
+function deleteTransaction(index) {
+    const transaction = transactions[index];
+    const product = products.find(p => p.name === transaction.product);
+    if (product) {
+        product.stock += transaction.quantity;
+    }
+    transactions.splice(index, 1);
+    renderTransactions();
+    renderProducts();
+}
     </script>
 </body>
 </html>
