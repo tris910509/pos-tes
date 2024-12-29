@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Kasir - Lengkap</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    button, input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background: #007bff;
+      color: #fff;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    table th, table td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    table th {
+      background: #007bff;
+      color: white;
+    }
+    .hidden {
+      display: none;
+    }
+    .logout {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+    .filter {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Halaman Login -->
+  <div id="loginPage" class="container">
+    <h1>Login</h1>
+    <form id="loginForm">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p id="errorMessage" style="color: red; display: none;">Username atau Password salah!</p>
+  </div>
+
+  <!-- Halaman Dashboard -->
+  <div id="dashboardPage" class="container hidden">
+    <button class="logout" onclick="logout()">Logout</button>
+    <h1>Dashboard</h1>
+    
+    <!-- Manajemen Produk -->
+    <h2>Manajemen Produk</h2>
+    <div class="filter">
+      <input type="text" id="filterProduct" placeholder="Cari produk...">
+    </div>
+    <form id="productForm">
+      <input type="text" id="productName" placeholder="Nama Produk" required>
+      <input type="number" id="productPrice" placeholder="Harga Produk" required>
+      <button type="submit">Tambah Produk</button>
+    </form>
+    <table id="productTable">
+      <thead>
+        <tr>
+          <th>Nama Produk</th>
+          <th>Harga</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- Transaksi -->
+    <h2>Transaksi</h2>
+    <form id="transactionForm">
+      <select id="productSelect"></select>
+      <input type="number" id="productQuantity" placeholder="Jumlah" required>
+      <button type="button" onclick="addTransaction()">Tambahkan ke Transaksi</button>
+    </form>
+    <table id="transactionTable">
+      <thead>
+        <tr>
+          <th>Produk</th>
+          <th>Harga</th>
+          <th>Jumlah</th>
+          <th>Total</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <p>Subtotal: Rp <span id="subtotal">0</span></p>
+    <p>Diskon (%): <input type="number" id="discount" value="0" min="0" max="100"></p>
+    <p>Pajak (%): <input type="number" id="tax" value="10" min="0" max="100"></p>
+    <p>Total Bayar: Rp <span id="total">0</span></p>
+    <button onclick="finalizeTransaction()">Cetak Struk</button>
+
+    <!-- Riwayat Transaksi -->
+    <h2>Riwayat Transaksi</h2>
+    <table id="historyTransactionTable">
+      <thead>
+        <tr>
+          <th>Produk</th>
+          <th>Harga</th>
+          <th>Jumlah</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    // Simulasi pengguna
+    const users = [
+      { username: "admin", password: "admin123", role: "admin" },
+      { username: "kasir", password: "kasir123", role: "kasir" }
+    ];
+
+    const products = [];
+    const transactions = [];
+
+    // Elemen
+    const loginPage = document.getElementById("loginPage");
+    const dashboardPage = document.getElementById("dashboardPage");
+    const productForm = document.getElementById("productForm");
+    const productTable = document.getElementById("productTable").querySelector("tbody");
+    const productSelect = document.getElementById("productSelect");
+    const transactionTable = document.getElementById("transactionTable").querySelector("tbody");
+    const historyTransactionTable = document.getElementById("historyTransactionTable").querySelector("tbody");
+    const subtotalEl = document.getElementById("subtotal");
+    const discountEl = document.getElementById("discount");
+    const taxEl = document.getElementById("tax");
+    const totalEl = document.getElementById("total");
+    const errorMessage = document.getElementById("errorMessage");
+    const filterProduct = document.getElementById("filterProduct");
+
+    // Login
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const user = users.find(u => u.username === username && u.password === password);
+      if (user) {
+        localStorage.setItem("userRole", user.role);
+        localStorage.setItem("isLoggedIn", true);
+        switchToDashboard();
+      } else {
+        errorMessage.style.display = "block";
+      }
+    });
+
+    // Logout
+    function logout() {
+      localStorage.clear();
+      switchToLogin();
+    }
+
+    // Pindah ke dashboard
+    function switchToDashboard() {
+      loginPage.classList.add("hidden");
+      dashboardPage.classList.remove("hidden");
+      renderProducts();
+    }
+
+    // Pindah ke login
+    function switchToLogin() {
+      dashboardPage.classList.add("hidden");
+      loginPage.classList.remove("hidden");
+    }
+
+    // Cek login saat halaman dimuat
+    window.onload = function() {
+      if (localStorage.getItem("isLoggedIn")) {
+        switchToDashboard();
+      } else {
+        switchToLogin();
+      }
+    };
+
+    // Manajemen Produk
+    productForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("productName").value;
+      const price = parseFloat(document.getElementById("productPrice").value);
+
+      if (name && price > 0) {
+        products.push({ name, price });
+        renderProducts();
+        productForm.reset();
+      } else {
+        alert("Masukkan nama dan harga yang valid!");
+      }
+    });
+
+    function renderProducts() {
+      productTable.innerHTML = "";
+      productSelect.innerHTML = "";
+      filterProduct.value = "";
+      const filter = filterProduct.value.toLowerCase();
+
+      products.forEach((product, index) => {
+        if (product.name.toLowerCase().includes(filter)) {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${product.name}</td>
+            <td>${formatCurrency(product.price)}</td>
+            <td><button onclick="deleteProduct(${index})">Hapus</button></td>
+          `;
+          productTable.appendChild(row);
+
+          const option = document.createElement("option");
+          option.value = index;
+          option.textContent = product.name;
+          productSelect.appendChild(option);
+        }
+      });
+    }
+
+    function deleteProduct(index) {
+      products.splice(index, 1);
+      renderProducts();
+    }
+
+    // Transaksi
+    function addTransaction() {
+      const productIndex = parseInt(productSelect.value);
+      const quantity = parseInt(document.getElementById("productQuantity").value);
+      const product = products[productIndex];
+
+      if (product && quantity > 0) {
+        const total = product.price * quantity;
+        transactions.push({ product: product.name, price: product.price, quantity, total });
+        renderTransactions();
+        renderHistoryTransaction();
+      } else {
+        alert("Masukkan produk dan jumlah yang valid!");
+      }
+    }
+
+    function renderTransactions() {
+      transactionTable.innerHTML = "";
+      let subtotal = 0;
+
+      transactions.forEach((trx, index) => {
+        subtotal += trx.total;
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${trx.product}</td>
+          <td>${formatCurrency(trx.price)}</td>
+          <td>${trx.quantity}</td>
+          <td>${formatCurrency(trx.total)}</td>
+          <td><button onclick="deleteTransaction(${index})">Hapus</button></td>
+        `;
+        transactionTable.appendChild(row);
+      });
+
+      subtotalEl.textContent = formatCurrency(subtotal);
+      updateTotal();
+    }
+
+    function deleteTransaction(index) {
+      transactions.splice(index, 1);
+      renderTransactions();
+    }
+
+    function renderHistoryTransaction() {
+      historyTransactionTable.innerHTML = "";
+
+      transactions.forEach(trx => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${trx.product}</td>
+          <td>${formatCurrency(trx.price)}</td>
+          <td>${trx.quantity}</td>
+          <td>${formatCurrency(trx.total)}</td>
+        `;
+        historyTransactionTable.appendChild(row);
+      });
+    }
+
+    function updateTotal() {
+      const subtotal = parseFloat(subtotalEl.textContent.replace('Rp ', '').replace(',', ''));
+      const discount = parseFloat(discountEl.value) || 0;
+      const tax = parseFloat(taxEl.value) || 10;
+
+      const total = subtotal - (subtotal * discount / 100) + (subtotal * tax / 100);
+      totalEl.textContent = formatCurrency(total.toFixed(2));
+    }
+
+    discountEl.addEventListener("input", updateTotal);
+    taxEl.addEventListener("input", updateTotal);
+    filterProduct.addEventListener("input", renderProducts);
+
+    // Format Uang
+    function formatCurrency(value) {
+      return 'Rp ' + value.toLocaleString(undefined, { minimumFractionDigits: 2 });
+    }
+
+    // Cetak Struk
+    function finalizeTransaction() {
+      const total = parseFloat(totalEl.textContent.replace('Rp ', '').replace(',', ''));
+      if (confirm(`Total pembayaran: Rp ${total.toFixed(2)}\nApakah Anda yakin ingin mencetak struk?`)) {
+        printReceipt();
+      }
+    }
+
+    function printReceipt() {
+      let receiptContent = `
+        <h1>Struk Transaksi</h1>
+        <table>
+          <tr>
+            <th>Produk</th>
+            <th>Harga</th>
+            <th>Jumlah</th>
+            <th>Total</th>
+          </tr>`;
+
+      transactions.forEach(trx => {
+        receiptContent += `
+          <tr>
+            <td>${trx.product}</td>
+            <td>${formatCurrency(trx.price)}</td>
+            <td>${trx.quantity}</td>
+            <td>${formatCurrency(trx.total)}</td>
+          </tr>`;
+      });
+
+      receiptContent += `
+        <tr>
+          <td colspan="3" style="text-align:right;">Subtotal</td>
+          <td>${formatCurrency(parseFloat(subtotalEl.textContent.replace('Rp ', '').replace(',', '')))}</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align:right;">Diskon (${discountEl.value}%)</td>
+          <td>${formatCurrency((parseFloat(discountEl.value) * parseFloat(subtotalEl.textContent.replace('Rp ', '').replace(',', '')) / 100).toFixed(2))}</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align:right;">Pajak (${taxEl.value}%)</td>
+          <td>${formatCurrency((parseFloat(taxEl.value) * parseFloat(subtotalEl.textContent.replace('Rp ', '').replace(',', '')) / 100).toFixed(2))}</td>
+        </tr>
+        <tr>
+          <td colspan="3" style="text-align:right;">Total Bayar</td>
+          <td>${totalEl.textContent}</td>
+        </tr>
+      </table>`;
+
+      const printWindow = window.open('', '', 'height=400,width=800');
+      printWindow.document.write('<html><head><title>Struk Transaksi</title>');
+      printWindow.document.write('</head><body>');
+      printWindow.document.write(receiptContent);
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.print();
+    }
+  </script>
+</body>
+</html>
