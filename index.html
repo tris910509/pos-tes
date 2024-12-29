@@ -148,8 +148,24 @@
         <tbody></tbody>
     </table>
 
+
+<h2>Laporan</h2>
+<form id="reportForm">
+    <input type="date" id="reportStartDate" required>
+    <input type="date" id="reportEndDate" required>
+    <button type="submit">Tampilkan Laporan</button>
+</form>
+<div id="reportContainer"></div>
+
+
+
+
+
+    
     <script>
 // Data untuk users, categories, suppliers, products, transactions
+
+  // Data
 const users = [];
 const categories = [];
 const suppliers = [];
@@ -369,6 +385,60 @@ function deleteTransaction(index) {
     renderTransactions();
     renderProducts();
 }
-    </script>
+
+
+      document.addEventListener('DOMContentLoaded', () => {
+    // Populate product options in transaction form
+    const productSelect = document.getElementById('transactionProduct');
+    products.forEach(product => {
+        productSelect.innerHTML += `<option value="${product.name}">${product.name} - ${product.price} (Stok: ${product.stock})</option>`;
+    });
+});
+
+
+        function generateReport() {
+    const startDate = document.getElementById('reportStartDate').value;
+    const endDate = document.getElementById('reportEndDate').value;
+    const filteredTransactions = transactions.filter(transaction => {
+        return new Date(transaction.date) >= new Date(startDate) && new Date(transaction.date) <= new Date(endDate);
+    });
+
+    let reportHtml = `
+        <h2>Laporan Transaksi</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Produk</th>
+                    <th>Jumlah</th>
+                    <th>Pelanggan</th>
+                    <th>Total Harga</th>
+                    <th>Status Pembayaran</th>
+                    <th>Tanggal</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+    filteredTransactions.forEach(transaction => {
+        reportHtml += `
+            <tr>
+                <td>${transaction.product}</td>
+                <td>${transaction.quantity}</td>
+                <td>${transaction.customer}</td>
+                <td>${transaction.totalPrice}</td>
+                <td>${transaction.paymentStatus}</td>
+                <td>${transaction.date}</td>
+            </tr>
+        `;
+    });
+
+    reportHtml += `</tbody></table>`;
+
+    document.getElementById('reportContainer').innerHTML = reportHtml;
+}
+
+
+        
+  </script>
 </body>
 </html>
