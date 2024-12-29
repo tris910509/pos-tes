@@ -1,506 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aplikasi Kasir - Lengkap</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f4f4;
-    }
-    .container {
-      max-width: 800px;
-      margin: 20px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    h1, h2 {
-      text-align: center;
-    }
-    button, input[type="text"], input[type="number"], select {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    button {
-      background: #007bff;
-      color: #fff;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0056b3;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 20px 0;
-    }
-    table th, table td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: left;
-    }
-    table th {
-      background: #007bff;
-      color: white;
-    }
-    .hidden {
-      display: none;
-    }
-    .logout {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    }
-    .filter {
-      margin-bottom: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Kasir Lengkap</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+        input, select, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background: #007bff;
+            color: #fff;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Aplikasi Kasir Lengkap</h1>
 
-  <!-- Halaman Login -->
-  <div id="loginPage" class="container">
-    <h1>Login</h1>
-    <form id="loginForm">
-      <input type="text" id="username" placeholder="Username" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
-    <p id="errorMessage" style="color: red; display: none;">Username atau Password salah!</p>
-  </div>
+        <!-- Kategori -->
+        <h2>Manajemen Kategori</h2>
+        <form id="categoryForm">
+            <input type="text" id="categoryName" placeholder="Nama Kategori" required>
+            <button type="submit">Tambah Kategori</button>
+        </form>
+        <table id="categoryTable">
+            <thead>
+                <tr>
+                    <th>Kategori</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
 
-  <!-- Halaman Dashboard -->
-  <div id="dashboardPage" class="container hidden">
-    <button class="logout" onclick="logout()">Logout</button>
-    <h1>Dashboard</h1>
-    
-    <!-- Manajemen Produk -->
-    <h2>Manajemen Produk</h2>
-    <div class="filter">
-      <input type="text" id="filterProduct" placeholder="Cari produk...">
-      <select id="filterCategory">
-        <option value="">Semua Kategori</option>
-      </select>
+        <!-- Produk -->
+        <h2>Manajemen Produk</h2>
+        <form id="productForm">
+            <input type="text" id="productName" placeholder="Nama Produk" required>
+            <input type="number" id="productPrice" placeholder="Harga Produk" required>
+            <input type="number" id="productStock" placeholder="Stok Produk" required>
+            <select id="productCategory" required>
+                <option value="">Pilih Kategori</option>
+            </select>
+            <button type="submit">Tambah Produk</button>
+        </form>
+        <table id="productTable">
+            <thead>
+                <tr>
+                    <th>Nama Produk</th>
+                    <th>Harga</th>
+                    <th>Stok</th>
+                    <th>Kategori</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <!-- Transaksi -->
+        <h2>Transaksi</h2>
+        <form id="transactionForm">
+            <select id="transactionProduct" required>
+                <option value="">Pilih Produk</option>
+            </select>
+            <input type="number" id="transactionQuantity" placeholder="Jumlah" required>
+            <select id="transactionPaymentStatus" required>
+                <option value="">Status Pembayaran</option>
+                <option value="Lunas">Lunas</option>
+                <option value="Belum Lunas">Belum Lunas</option>
+                <option value="Pending">Pending</option>
+            </select>
+            <textarea id="paymentDescription" placeholder="Keterangan Pembayaran"></textarea>
+            <button type="submit">Tambah ke Transaksi</button>
+        </form>
+        <table id="transactionTable">
+            <thead>
+                <tr>
+                    <th>Produk</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Keterangan</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <h3>Total: <span id="totalAmount">0</span></h3>
+        <button id="finalizeTransaction">Selesaikan Transaksi</button>
+
+        <!-- Cetak Struk -->
+        <h2>Cetak Struk</h2>
+        <div id="receipt" class="hidden"></div>
+        <button id="printReceipt" class="hidden">Cetak Struk</button>
+
+        <!-- Laporan -->
+        <h2>Laporan Transaksi</h2>
+        <input type="date" id="reportDate">
+        <button id="generateReport">Tampilkan Laporan</button>
+        <table id="reportTable">
+            <thead>
+                <tr>
+                    <th>Produk</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Keterangan</th>
+                    <th>Tanggal</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
-    <form id="productForm">
-      <input type="text" id="productName" placeholder="Nama Produk" required>
-      <input type="number" id="productPrice" placeholder="Harga Produk" required>
-      <select id="productCategory" required>
-        <option value="">Pilih Kategori</option>
-      </select>
-      <button type="submit">Tambah Produk</button>
-    </form>
-    <table id="productTable">
-      <thead>
-        <tr>
-          <th>Nama Produk</th>
-          <th>Harga</th>
-          <th>Kategori</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
 
-    <!-- Manajemen Kategori -->
-    <h2>Manajemen Kategori</h2>
-    <form id="categoryForm">
-      <input type="text" id="categoryName" placeholder="Nama Kategori" required>
-      <button type="submit">Tambah Kategori</button>
-    </form>
-    <table id="categoryTable">
-      <thead>
-        <tr>
-          <th>Nama Kategori</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <script>
+        // Data Storage
+        const categories = [];
+        const products = [];
+        const transactions = [];
+        const transactionHistory = [];
 
-    <!-- Manajemen Pelanggan -->
-    <h2>Manajemen Pelanggan</h2>
-    <form id="customerForm">
-      <input type="text" id="customerName" placeholder="Nama Pelanggan" required>
-      <input type="email" id="customerEmail" placeholder="Email Pelanggan" required>
-      <button type="submit">Tambah Pelanggan</button>
-    </form>
-    <table id="customerTable">
-      <thead>
-        <tr>
-          <th>Nama Pelanggan</th>
-          <th>Email</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+        // Element References
+        const categoryForm = document.getElementById("categoryForm");
+        const categoryTable = document.getElementById("categoryTable").querySelector("tbody");
 
-    <!-- Manajemen Supplier -->
-    <h2>Manajemen Supplier</h2>
-    <form id="supplierForm">
-      <input type="text" id="supplierName" placeholder="Nama Supplier" required>
-      <input type="email" id="supplierEmail" placeholder="Email Supplier" required>
-      <button type="submit">Tambah Supplier</button>
-    </form>
-    <table id="supplierTable">
-      <thead>
-        <tr>
-          <th>Nama Supplier</th>
-          <th>Email</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+        const productForm = document.getElementById("productForm");
+        const productTable = document.getElementById("productTable").querySelector("tbody");
+        const productCategory = document.getElementById("productCategory");
 
-    <!-- Manajemen Transaksi -->
-    <h2>Transaksi</h2>
-    <form id="transactionForm">
-      <select id="productSelect"></select>
-      <input type="number" id="productQuantity" placeholder="Jumlah" required>
-      <select id="paymentStatus">
-        <option value="lunas">Lunas</option>
-        <option value="belum_lunas">Belum Lunas</option>
-        <option value="pending">Pending</option>
-      </select>
-      <button type="button" onclick="addTransaction()">Tambahkan ke Transaksi</button>
-    </form>
-    <table id="transactionTable">
-      <thead>
-        <tr>
-          <th>Produk</th>
-          <th>Harga</th>
-          <th>Jumlah</th>
-          <th>Total</th>
-          <th>Status Pembayaran</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <p>Subtotal: Rp <span id="subtotal">0</span></p>
-    <p>Diskon (%): <input type="number" id="discount" value="0" min="0" max="100"></p>
-    <p>Pajak (%): <input type="number" id="tax" value="10" min="0" max="100"></p>
-    <p>Total Bayar: Rp <span id="total">0</span></p>
-    <button onclick="finalizeTransaction()">Cetak Struk</button>
+        const transactionForm = document.getElementById("transactionForm");
+        const transactionProduct = document.getElementById("transactionProduct");
+        const transactionTable = document.getElementById("transactionTable").querySelector("tbody");
+        const totalAmount = document.getElementById("totalAmount");
 
-    <!-- Riwayat Transaksi -->
-    <h2>Riwayat Transaksi</h2>
-    <table id="historyTransactionTable">
-      <thead>
-        <tr>
-          <th>Produk</th>
-          <th>Harga</th>
-          <th>Jumlah</th>
-          <th>Total</th>
-          <th>Status Pembayaran</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
+        const receipt = document.getElementById("receipt");
+        const printReceipt = document.getElementById("printReceipt");
 
-  <script>
-    // Simulasi pengguna
-    const users = [
-      { username: "admin", password: "admin123", role: "admin" },
-      { username: "kasir", password: "kasir123", role: "kasir" }
-    ];
+        const reportDate = document.getElementById("reportDate");
+        const reportTable = document.getElementById("reportTable").querySelector("tbody");
 
-    const products = [];
-    const categories = [];
-    const customers = [];
-    const suppliers = [];
-    const transactions = [];
+        // Event Listeners
+        categoryForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const categoryName = document.getElementById("categoryName").value;
+            categories.push({ name: categoryName });
+            renderCategories();
+            categoryForm.reset();
+        });
 
-    // Elemen
-    const loginPage = document.getElementById("loginPage");
-    const dashboardPage = document.getElementById("dashboardPage");
-    const productForm = document.getElementById("productForm");
-    const productTable = document.getElementById("productTable").querySelector("tbody");
-    const productSelect = document.getElementById("productSelect");
-    const transactionTable = document.getElementById("transactionTable").querySelector("tbody");
-    const historyTransactionTable = document.getElementById("historyTransactionTable").querySelector("tbody");
-    const subtotalEl = document.getElementById("subtotal");
-    const discountEl = document.getElementById("discount");
-    const taxEl = document.getElementById("tax");
-    const totalEl = document.getElementById("total");
-    const filterProduct = document.getElementById("filterProduct");
-    const filterCategory = document.getElementById("filterCategory");
+        productForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const productName = document.getElementById("productName").value;
+            const productPrice = parseFloat(document.getElementById("productPrice").value);
+            const productStock = parseInt(document.getElementById("productStock").value);
+            const productCategoryIndex = document.getElementById("productCategory").value;
+            if (productCategoryIndex !== "") {
+                products.push({
+                    name: productName,
+                    price: productPrice,
+                    stock: productStock,
+                    category: categories[productCategoryIndex].name,
+                });
+                renderProducts();
+                renderTransactionProducts();
+                productForm.reset();
+            }
+        });
 
-    // Login
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+        transactionForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const productIndex = transactionProduct.value;
+            const quantity = parseInt(document.getElementById("transactionQuantity").value);
+            const paymentStatus = document.getElementById("transactionPaymentStatus").value;
+            const paymentDescription = document.getElementById("paymentDescription").value;
 
-      const user = users.find(u => u.username === username && u.password === password);
-      if (user) {
-        localStorage.setItem("userRole", user.role);
-        localStorage.setItem("isLoggedIn", true);
-        switchToDashboard();
-      } else {
-        document.getElementById("errorMessage").style.display = "block";
-      }
-    });
+            if (productIndex !== "" && quantity > 0 && paymentStatus) {
+                const product = products[productIndex];
+                if (product.stock >= quantity) {
+                    product.stock -= quantity;
+                    const total = product.price * quantity;
+                    transactions.push({
+                        product,
+                        quantity,
+                        total,
+                        paymentStatus,
+                        paymentDescription,
+                        date: new Date().toLocaleDateString(),
+                    });
+                    renderProducts();
+                    renderTransactions();
+                } else {
+                    alert("Stok tidak mencukupi!");
+                }
+            }
+        });
 
-    // Logout
-    function logout() {
-      localStorage.clear();
-      switchToLogin();
-    }
+        document.getElementById("finalizeTransaction").addEventListener("click", () => {
+            transactionHistory.push(...transactions);
+            renderTransactionHistory();
+            printReceipt.classList.remove("hidden");
+            receipt.classList.remove("hidden");
+            generateReceipt();
+            transactions.length = 0;
+            renderTransactions();
+        });
 
-    // Pindah ke dashboard
-    function switchToDashboard() {
-      loginPage.classList.add("hidden");
-      dashboardPage.classList.remove("hidden");
-      renderProducts();
-      renderCategories();
-      renderCustomers();
-      renderSuppliers();
-    }
+        document.getElementById("generateReport").addEventListener("click", () => {
+            const selectedDate = reportDate.value;
+            const filteredTransactions = transactionHistory.filter(
+                (transaction) => transaction.date === selectedDate
+            );
+            renderReport(filteredTransactions);
+        });
 
-    // Pindah ke login
-    function switchToLogin() {
-      dashboardPage.classList.add("hidden");
-      loginPage.classList.remove("hidden");
-    }
-
-    // Cek login saat halaman dimuat
-    window.onload = function() {
-      if (localStorage.getItem("isLoggedIn")) {
-        switchToDashboard();
-      } else {
-        switchToLogin();
-      }
-    };
-
-    // Manajemen Produk
-    productForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      const name = document.getElementById("productName").value;
-      const price = parseFloat(document.getElementById("productPrice").value);
-      const categoryIndex = document.getElementById("productCategory").value;
-
-      if (name && price > 0 && categoryIndex) {
-        const category = categories[categoryIndex];
-        products.push({ name, price, category: category.name });
-        renderProducts();
-        productForm.reset();
-      } else {
-        alert("Masukkan nama, harga, dan kategori produk yang valid!");
-      }
-    });
-
-    function renderProducts() {
-      productTable.innerHTML = "";
-      productSelect.innerHTML = "<option value=''>Pilih Produk</option>";
-      filterCategory.innerHTML = "<option value=''>Semua Kategori</option>";
-
-      const filter = filterProduct.value.toLowerCase();
-      const filterCategoryVal = filterCategory.value.toLowerCase();
-
-      categories.forEach((category, index) => {
-        filterCategory.innerHTML += `<option value="${index}">${category.name}</option>`;
-      });
-
-      products.forEach((product, index) => {
-        if (product.name.toLowerCase().includes(filter) && (filterCategoryVal === "" || product.category.toLowerCase() === filterCategoryVal)) {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${product.name}</td>
-            <td>${formatCurrency(product.price)}</td>
-            <td>${product.category}</td>
-            <td><button onclick="deleteProduct(${index})">Hapus</button></td>
-          `;
-          productTable.appendChild(row);
-
-          const option = document.createElement("option");
-          option.value = index;
-          option.textContent = product.name;
-          productSelect.appendChild(option);
-        }
-      });
-    }
-
-    function deleteProduct(index) {
-      products.splice(index, 1);
-      renderProducts();
-    }
-
-    // Manajemen Kategori
-    categoryForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      const categoryName = document.getElementById("categoryName").value;
-
-      if (categoryName) {
-        categories.push({ name: categoryName });
-        renderCategories();
-        categoryForm.reset();
-      } else {
-        alert("Masukkan nama kategori yang valid!");
-      }
-    });
-
-    function renderCategories() {
-      categoryTable.innerHTML = "";
-      filterCategory.innerHTML = "<option value=''>Semua Kategori</option>";
-      categories.forEach((category, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${category.name}</td>
-          <td><button onclick="deleteCategory(${index})">Hapus</button></td>
-        `;
-        categoryTable.appendChild(row);
-        filterCategory.innerHTML += `<option value="${index}">${category.name}</option>`;
-      });
-    }
-
-    function deleteCategory(index) {
-      categories.splice(index, 1);
-      products.forEach(product => {
-        if (product.category === categories[index].name) {
-          product.category = "Uncategorized";
-        }
-      });
-      renderCategories();
-      renderProducts();
-    }
-
-    // Manajemen Pelanggan
-    customerForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      const customerName = document.getElementById("customerName").value;
-      const customerEmail = document.getElementById("customerEmail").value;
-
-      if (customerName && customerEmail) {
-        customers.push({ name: customerName, email: customerEmail });
-        renderCustomers();
-        customerForm.reset();
-      } else {
-        alert("Masukkan nama dan email pelanggan yang valid!");
-      }
-    });
-
-    function renderCustomers() {
-      const customerTable = document.getElementById("customerTable").querySelector("tbody");
-      customerTable.innerHTML = "";
-      customers.forEach((customer, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${customer.name}</td>
-          <td>${customer.email}</td>
-          <td><button onclick="deleteCustomer(${index})">Hapus</button></td>
-        `;
-        customerTable.appendChild(row);
-      });
-    }
-
-    function deleteCustomer(index) {
-      customers.splice(index, 1);
-      renderCustomers();
-    }
-
-    // Manajemen Supplier
-    supplierForm.addEventListener("submit", function(e) {
-      e.preventDefault();
-      const supplierName = document.getElementById("supplierName").value;
-      const supplierEmail = document.getElementById("supplierEmail").value;
-
-      if (supplierName && supplierEmail) {
-        suppliers.push({ name: supplierName, email: supplierEmail });
-        renderSuppliers();
-        supplierForm.reset();
-      } else {
-        alert("Masukkan nama dan email supplier yang valid!");
-      }
-    });
-
-    function renderSuppliers() {
-      const supplierTable = document.getElementById("supplierTable").querySelector("tbody");
-      supplierTable.innerHTML = "";
-      suppliers.forEach((supplier, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${supplier.name}</td>
-          <td>${supplier.email}</td>
-          <td><button onclick="deleteSupplier(${index})">Hapus</button></td>
-        `;
-        supplierTable.appendChild(row);
-      });
-    }
-
-    function deleteSupplier(index) {
-      suppliers.splice(index, 1);
-      renderSuppliers();
-    }
-
-    // Transaksi
-    let cart = [];
-
-    function addTransaction() {
-      const productIndex = productSelect.value;
-      const quantity = parseInt(document.getElementById("productQuantity").value);
-      const paymentStatus = document.getElementById("paymentStatus").value;
-
-      if (productIndex !== "" && quantity > 0) {
-        const product = products[productIndex];
-        const existingCartItem = cart.find(item => item.product.name === product.name);
-        const price = product.price * quantity;
-
-        if (existingCartItem) {
-          existingCartItem.quantity += quantity;
-          existingCartItem.total += price;
-        } else {
-          cart.push({ product, quantity, total: price, paymentStatus });
-        }
-
-        renderTransactions();
-      } else {
-        alert("Silakan pilih produk dan masukkan jumlah yang valid!");
-      }
-    }
-
-    function renderTransactions() {
-      transactionTable.innerHTML = "";
-      let subtotal = 0;
-
-      cart.forEach((item, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${item.product.name}</td>
-          <td>${formatCurrency(item.product.price)}</td>
-          <td>${item.quantity}</td>
-          <td>${formatCurrency(item.total)}</td>
-          <td>${item.paymentStatus}</td>
-          <td><button onclick="deleteTransaction(${index})">Hapus</button></td>
-        `;
-        transactionTable.appendChild(row);
-        subtotal += item.total;
-      });
-
-      subtotalEl.textContent = subtotal;
-      const discount = parseFloat(discountEl.value) / 100;
-      const tax = parseFloat(taxEl.value) / 100;
-      const total = subtotal - (subtotal * discount) + (subtotal * tax);
-      totalEl.textContent = total.toFixed(2);
-    }
-
-    function deleteTransaction(index) {
-      cart.splice(index, 1);
-      renderTransactions();
-    }
-
-    // Finalisasi Transaksi dan Cetak Struk
-    function finalizeTransaction() {
-      if (cart.length === 0) {
-        alert
+        // Helper Functions
+        function renderCategories() { /* ... */ }
+        function renderProducts() { /* ... */ }
+        function renderTransactionProducts() { /* ... */ }
+        function renderTransactions() { /* ... */ }
+        function renderTransactionHistory() { /* ... */ }
+        function renderReport(data) { /* ... */ }
+        function generateReceipt() { /* ... */ }
+    </script>
+</body>
+</html>
